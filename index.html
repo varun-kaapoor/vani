@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vani — Private dictation for your Mac</title>
+  <meta name="description" content="Hold ⌥ Option, speak, release — your words appear at the cursor. No cloud. No subscription. Everything stays on your Mac.">
+  <style>
+    :root {
+      --ink:    #0E0E0E;
+      --ink2:   #3A3530;
+      --soft:   #888;
+      --line:   #E8E8E8;
+      --bg:     #FAFAFA;
+      --white:  #FFFFFF;
+      --accent: linear-gradient(135deg, #ff3b2f, #ff9500);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, "SF Pro Display", "Helvetica Neue", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px; height: 60px;
+      background: rgba(250,250,250,0.88);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-icon {
+      width: 30px; height: 30px; border-radius: 8px;
+      background: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+    }
+    .nav-name { font-size: 16px; font-weight: 800; color: var(--ink); letter-spacing: -0.3px; }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-links a { font-size: 14px; color: var(--soft); text-decoration: none; transition: color 0.15s; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-download {
+      background: var(--ink); color: #fff;
+      font-size: 13px; font-weight: 600;
+      padding: 8px 18px; border-radius: 8px; text-decoration: none;
+      transition: opacity 0.15s;
+    }
+    .nav-download:hover { opacity: 0.8; }
+
+    /* ── HERO ── */
+    .hero {
+      max-width: 760px; margin: 0 auto;
+      padding: 100px 24px 80px;
+      text-align: center;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #fff; border: 1px solid var(--line);
+      border-radius: 20px; padding: 5px 14px;
+      font-size: 12px; font-weight: 600; color: var(--soft);
+      margin-bottom: 28px;
+    }
+    .hero-badge span { color: #ff5500; }
+    .hero-title {
+      font-size: 64px; font-weight: 900;
+      color: var(--ink); letter-spacing: -3px;
+      line-height: 1.05; margin-bottom: 20px;
+    }
+    .hero-title .accent {
+      background: var(--accent);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero-sub {
+      font-size: 20px; color: var(--soft); line-height: 1.6;
+      max-width: 540px; margin: 0 auto 36px;
+    }
+    .hero-cta { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--ink); color: #fff;
+      font-size: 15px; font-weight: 700;
+      padding: 14px 28px; border-radius: 12px; text-decoration: none;
+      transition: opacity 0.15s;
+    }
+    .btn-primary:hover { opacity: 0.85; }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 6px;
+      color: var(--soft); font-size: 14px; text-decoration: none;
+      padding: 14px 20px; border-radius: 12px;
+      border: 1px solid var(--line);
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .btn-secondary:hover { border-color: #ccc; color: var(--ink); }
+    .hero-req { font-size: 12px; color: #bbb; margin-top: 16px; }
+
+    /* ── APP SCREENSHOT ── */
+    .screenshot-wrap {
+      max-width: 860px; margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+    .screenshot-frame {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05), 0 24px 80px rgba(0,0,0,0.12);
+      overflow: hidden;
+      border: 1px solid var(--line);
+    }
+    .fake-titlebar {
+      height: 38px; background: #f5f5f5; border-bottom: 1px solid var(--line);
+      display: flex; align-items: center; padding: 0 14px; gap: 7px;
+    }
+    .dot { width: 12px; height: 12px; border-radius: 50%; }
+    .dot.r{background:#ff5f57} .dot.y{background:#febc2e} .dot.g{background:#28c840}
+    .fake-window {
+      display: flex; height: 400px;
+    }
+    .fake-sidebar {
+      width: 180px; flex-shrink: 0; background: #fafafa;
+      border-right: 1px solid var(--line);
+      padding: 16px 10px; display: flex; flex-direction: column; gap: 3px;
+    }
+    .fake-brand { display: flex; align-items: center; gap: 8px; padding: 6px 8px; margin-bottom: 14px; }
+    .fake-brand-icon {
+      width: 26px; height: 26px; border-radius: 7px;
+      background: var(--accent); display: flex; align-items: center;
+      justify-content: center; font-size: 12px;
+    }
+    .fake-brand-name { font-size: 14px; font-weight: 800; color: var(--ink); }
+    .fake-nav {
+      display: flex; align-items: center; gap: 7px; padding: 6px 9px;
+      border-radius: 7px; font-size: 12.5px; color: #bbb;
+    }
+    .fake-nav.active { background: #f0f0f0; color: var(--ink); font-weight: 600; }
+    .fake-main { flex: 1; padding: 24px; display: flex; flex-direction: column; gap: 16px; background: #fafafa; }
+    .fake-greet { font-size: 18px; font-weight: 800; color: var(--ink); }
+    .fake-sub { font-size: 11px; color: #bbb; font-style: italic; }
+    .fake-stats { display: grid; grid-template-columns: 1.5fr 1fr; gap: 10px; }
+    .fake-hero-card {
+      background: #fff; border: 1.5px solid var(--line);
+      border-radius: 12px; padding: 16px;
+    }
+    .fake-hero-num { font-size: 42px; font-weight: 900; color: var(--ink); letter-spacing: -2px; line-height: 1; }
+    .fake-hero-lbl { font-size: 10px; color: #bbb; margin-top: 4px; }
+    .fake-smalls { display: flex; flex-direction: column; gap: 10px; }
+    .fake-small { background: #fff; border: 1.5px solid var(--line); border-radius: 10px; padding: 12px 14px; }
+    .fake-small-num { font-size: 22px; font-weight: 900; color: var(--ink); letter-spacing: -0.8px; }
+    .fake-small-lbl { font-size: 10px; color: #bbb; margin-top: 2px; }
+    .fake-rows { display: flex; flex-direction: column; gap: 0; }
+    .fake-row { display: flex; gap: 10px; padding: 7px 0; border-bottom: 1px solid #f5f5f5; align-items: center; }
+    .fake-time { font-size: 10px; color: #ccc; width: 48px; }
+    .fake-text { font-size: 12px; color: #555; flex: 1; }
+    .hist-label { font-size: 9px; color: #ccc; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+
+    /* ── HOW IT WORKS ── */
+    .section { max-width: 860px; margin: 0 auto; padding: 0 24px 80px; }
+    .section-title {
+      font-size: 36px; font-weight: 800; color: var(--ink);
+      letter-spacing: -1px; margin-bottom: 40px; text-align: center;
+    }
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .step {
+      background: #fff; border: 1px solid var(--line);
+      border-radius: 14px; padding: 28px 24px;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .step-num {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: var(--ink); color: #fff;
+      font-size: 16px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .step-title { font-size: 16px; font-weight: 700; color: var(--ink); }
+    .step-desc  { font-size: 14px; color: var(--soft); line-height: 1.6; }
+
+    /* ── HOTKEYS ── */
+    .hotkeys { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .hotkey-card {
+      background: #fff; border: 1px solid var(--line);
+      border-radius: 12px; padding: 24px;
+    }
+    .key-badge {
+      display: inline-block; background: #f5f5f5;
+      border: 1px solid #ddd; border-radius: 6px;
+      padding: 4px 10px; font-size: 13px; font-weight: 700;
+      color: var(--ink); margin-bottom: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .hotkey-label { font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+    .hotkey-desc  { font-size: 13px; color: var(--soft); line-height: 1.5; }
+
+    /* ── PRIVACY ── */
+    .privacy-wrap {
+      max-width: 860px; margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+    .privacy-card {
+      background: var(--ink); border-radius: 20px;
+      padding: 48px 48px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 48px;
+      align-items: center;
+    }
+    .privacy-title { font-size: 32px; font-weight: 800; color: #fff; letter-spacing: -1px; line-height: 1.2; margin-bottom: 12px; }
+    .privacy-sub   { font-size: 16px; color: rgba(255,255,255,0.5); line-height: 1.6; }
+    .privacy-items { display: flex; flex-direction: column; gap: 14px; }
+    .privacy-item  { display: flex; align-items: flex-start; gap: 12px; }
+    .priv-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+    .priv-text h4  { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 2px; }
+    .priv-text p   { font-size: 13px; color: rgba(255,255,255,0.45); line-height: 1.5; }
+
+    /* ── STATS ── */
+    .stats-row {
+      max-width: 860px; margin: 0 auto;
+      padding: 0 24px 80px;
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+    }
+    .stat-box {
+      background: #fff; border: 1px solid var(--line);
+      border-radius: 14px; padding: 28px 20px;
+      text-align: center;
+    }
+    .stat-box .num { font-size: 36px; font-weight: 900; color: var(--ink); letter-spacing: -1.5px; line-height: 1; margin-bottom: 6px; }
+    .stat-box .lbl { font-size: 13px; color: var(--soft); }
+
+    /* ── DOWNLOAD CTA ── */
+    .cta-wrap { max-width: 860px; margin: 0 auto; padding: 0 24px 100px; }
+    .cta-box {
+      background: #fff; border: 1px solid var(--line);
+      border-radius: 20px; padding: 56px;
+      text-align: center;
+    }
+    .cta-title { font-size: 40px; font-weight: 900; color: var(--ink); letter-spacing: -1.5px; margin-bottom: 12px; }
+    .cta-sub   { font-size: 17px; color: var(--soft); margin-bottom: 32px; line-height: 1.6; }
+    .cta-req   { font-size: 13px; color: #ccc; margin-top: 16px; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 28px 40px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-brand { display: flex; align-items: center; gap: 8px; }
+    .footer-brand-icon {
+      width: 22px; height: 22px; border-radius: 6px;
+      background: var(--accent); display: flex; align-items: center;
+      justify-content: center; font-size: 10px;
+    }
+    .footer-name { font-size: 13px; font-weight: 700; color: var(--ink); }
+    .footer-right { font-size: 12px; color: #bbb; }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a { font-size: 12px; color: #bbb; text-decoration: none; }
+    .footer-links a:hover { color: var(--ink); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .hero-title { font-size: 40px; }
+      .steps, .hotkeys, .stats-row { grid-template-columns: 1fr; }
+      .privacy-card { grid-template-columns: 1fr; }
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="#">
+    <div class="nav-icon">🎙</div>
+    <span class="nav-name">Vani</span>
+  </a>
+  <div class="nav-links">
+    <a href="#how">How it works</a>
+    <a href="#privacy">Privacy</a>
+    <a href="#download">Download</a>
+  </div>
+  <a class="nav-download" href="#download">Download free →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">🎙 <span>वाणी</span> — Hindi for voice or speech</div>
+  <h1 class="hero-title">
+    Speak. It types.<br>
+    <span class="accent">Stays on your Mac.</span>
+  </h1>
+  <p class="hero-sub">
+    Hold ⌥ Option, speak, release — your words appear at the cursor in any app.
+    No cloud. No subscription. No data leaving your device.
+  </p>
+  <div class="hero-cta">
+    <a class="btn-primary" href="#download">
+      ⬇ Download for Mac
+    </a>
+    <a class="btn-secondary" href="https://github.com/varun-kaapoor/vani" target="_blank">
+      View on GitHub →
+    </a>
+  </div>
+  <p class="hero-req">macOS 26 Tahoe · Apple Silicon · Free</p>
+</section>
+
+<!-- SCREENSHOT -->
+<div class="screenshot-wrap">
+  <div class="screenshot-frame">
+    <div class="fake-titlebar">
+      <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+    </div>
+    <div class="fake-window">
+      <div class="fake-sidebar">
+        <div class="fake-brand">
+          <div class="fake-brand-icon">🎙</div>
+          <div class="fake-brand-name">Vani</div>
+        </div>
+        <div class="fake-nav active">⌂ Home</div>
+        <div class="fake-nav">📊 Insights</div>
+        <div class="fake-nav">📖 Dictionary</div>
+        <div class="fake-nav">📋 Clipboard</div>
+      </div>
+      <div class="fake-main">
+        <div><div class="fake-greet">Welcome back</div><div class="fake-sub">वाणी — Hindi for voice or speech</div></div>
+        <div class="fake-stats">
+          <div class="fake-hero-card">
+            <div class="fake-hero-num">9,341 🚀</div>
+            <div class="fake-hero-lbl">words dictated · ~37 pages</div>
+          </div>
+          <div class="fake-smalls">
+            <div class="fake-small"><div class="fake-small-num">14 🔥</div><div class="fake-small-lbl">day streak</div></div>
+            <div class="fake-small"><div class="fake-small-num">~2h 49m ⏱</div><div class="fake-small-lbl">time saved</div></div>
+          </div>
+        </div>
+        <div>
+          <div class="hist-label" style="margin-bottom:6px;">Today</div>
+          <div class="fake-rows">
+            <div class="fake-row"><div class="fake-time">10:28 PM</div><div class="fake-text">Let's schedule the design review for Thursday afternoon</div></div>
+            <div class="fake-row"><div class="fake-time">9:56 PM</div><div class="fake-text">Moving the team sync over to Slack starting next week</div></div>
+            <div class="fake-row"><div class="fake-time">7:25 PM</div><div class="fake-text">Can you send me the latest version of the document</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-row">
+  <div class="stat-box"><div class="num">100%</div><div class="lbl">On-device processing</div></div>
+  <div class="stat-box"><div class="num">~150MB</div><div class="lbl">One-time model download</div></div>
+  <div class="stat-box"><div class="num">3×</div><div class="lbl">Faster than typing</div></div>
+  <div class="stat-box"><div class="num">Free</div><div class="lbl">No subscription ever</div></div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="section" id="how">
+  <div class="section-title">Simple as holding a key</div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-title">Hold ⌥ Option</div>
+      <div class="step-desc">Click into any text field — Mail, Slack, Notes, anything. Hold the Option key to start recording.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-title">Speak naturally</div>
+      <div class="step-desc">Talk at your normal pace. Vani transcribes on-device using Apple's Neural Engine — no internet needed.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-title">Release and done</div>
+      <div class="step-desc">Release the key. Your words appear at the cursor, cleaned up and ready to send.</div>
+    </div>
+  </div>
+</section>
+
+<!-- HOTKEYS -->
+<section class="section">
+  <div class="section-title">Three ways to dictate</div>
+  <div class="hotkeys">
+    <div class="hotkey-card">
+      <div class="key-badge">Hold ⌥</div>
+      <div class="hotkey-label">Push to talk</div>
+      <div class="hotkey-desc">Records while held, transcribes on release. Best for short messages.</div>
+    </div>
+    <div class="hotkey-card">
+      <div class="key-badge">Double-tap ⌥</div>
+      <div class="hotkey-label">Hands-free</div>
+      <div class="hotkey-desc">Starts recording, tap once to stop. Best for long emails and notes.</div>
+    </div>
+    <div class="hotkey-card">
+      <div class="key-badge">⌥ + Space</div>
+      <div class="hotkey-label">Alternative trigger</div>
+      <div class="hotkey-desc">Another way to go hands-free. Configurable to Control, Command, or Fn.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRIVACY -->
+<div class="privacy-wrap" id="privacy">
+  <div class="privacy-card">
+    <div>
+      <div class="privacy-title">Your voice never leaves your Mac.</div>
+      <div class="privacy-sub">No audio sent to servers. No account required. No analytics. Vani runs entirely on your device using Apple's on-device models.</div>
+    </div>
+    <div class="privacy-items">
+      <div class="privacy-item">
+        <div class="priv-icon">🔒</div>
+        <div class="priv-text">
+          <h4>On-device transcription</h4>
+          <p>WhisperKit runs the Whisper model on your Apple Neural Engine. Audio never leaves your Mac.</p>
+        </div>
+      </div>
+      <div class="privacy-item">
+        <div class="priv-icon">✨</div>
+        <div class="priv-text">
+          <h4>On-device AI cleanup</h4>
+          <p>Apple FoundationModels removes filler words and adds punctuation locally.</p>
+        </div>
+      </div>
+      <div class="privacy-item">
+        <div class="priv-icon">🚫</div>
+        <div class="priv-text">
+          <h4>No telemetry, ever</h4>
+          <p>No usage tracking. No crash reports sent anywhere. No API keys. Nothing.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DOWNLOAD CTA -->
+<div class="cta-wrap" id="download">
+  <div class="cta-box">
+    <div class="cta-title">Start dictating today.</div>
+    <p class="cta-sub">Free forever. No account. No subscription.<br>Everything stays on your Mac.</p>
+    <a class="btn-primary" href="https://github.com/varun-kaapoor/vani/releases/latest" style="font-size:17px;padding:16px 36px;border-radius:14px;">
+      ⬇ Download Vani for Mac
+    </a>
+    <p class="cta-req">macOS 26 Tahoe required · Apple Silicon only · ~150MB on first launch</p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <div class="footer-brand-icon">🎙</div>
+    <span class="footer-name">Vani</span>
+  </div>
+  <div class="footer-links">
+    <a href="https://github.com/varun-kaapoor/vani" target="_blank">GitHub</a>
+    <a href="https://github.com/varun-kaapoor/vani/releases" target="_blank">Releases</a>
+    <a href="https://github.com/varun-kaapoor/vani#readme" target="_blank">README</a>
+  </div>
+  <div class="footer-right">Built by Varun Kapoor · Free & open</div>
+</footer>
+
+</body>
+</html>

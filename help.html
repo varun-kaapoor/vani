@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vani Help</title>
+  <style>
+    :root {
+      --ink:   #0E0E0E;
+      --ink2:  #3A3530;
+      --soft:  #888;
+      --line:  #E8E8E8;
+      --bg:    #FAFAFA;
+      --white: #FFFFFF;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, "SF Pro Display", "Helvetica Neue", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px; height: 60px;
+      background: rgba(250,250,250,0.88);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-icon {
+      width: 30px; height: 30px; border-radius: 8px;
+      background: linear-gradient(135deg, #ff3b2f, #ff9500);
+      display: flex; align-items: center; justify-content: center; font-size: 14px;
+    }
+    .nav-name { font-size: 16px; font-weight: 800; color: var(--ink); }
+    .nav-back { font-size: 13px; color: var(--soft); text-decoration: none; }
+    .nav-back:hover { color: var(--ink); }
+
+    /* HERO */
+    .hero {
+      background: var(--ink); padding: 60px 40px;
+      text-align: center;
+    }
+    .hero h1 { font-size: 40px; font-weight: 900; color: #fff; letter-spacing: -1.5px; margin-bottom: 10px; }
+    .hero p  { font-size: 17px; color: rgba(255,255,255,0.5); }
+
+    /* CONTENT */
+    .content { max-width: 740px; margin: 0 auto; padding: 60px 24px 100px; }
+
+    /* SECTION */
+    .section { margin-bottom: 56px; }
+    .section-title {
+      font-size: 11px; font-weight: 700; color: var(--soft);
+      letter-spacing: 0.08em; text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    /* CARD */
+    .card {
+      background: var(--white); border: 1px solid var(--line);
+      border-radius: 14px; overflow: hidden; margin-bottom: 10px;
+    }
+    .card-header {
+      padding: 18px 20px; cursor: pointer;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px;
+    }
+    .card-header:hover { background: #f9f9f9; }
+    .card-q { font-size: 14px; font-weight: 600; color: var(--ink); }
+    .card-chevron { font-size: 11px; color: var(--soft); flex-shrink: 0; }
+    .card-body {
+      padding: 0 20px 18px;
+      font-size: 14px; color: var(--ink2); line-height: 1.7;
+      border-top: 1px solid var(--line);
+    }
+    .card-body p { margin-top: 12px; }
+    .card-body code {
+      background: #f4f4f4; border: 1px solid var(--line);
+      padding: 2px 7px; border-radius: 5px;
+      font-size: 12px; font-family: "SF Mono", monospace;
+    }
+    .card-body ul { padding-left: 18px; margin-top: 8px; }
+    .card-body li { margin-bottom: 6px; }
+
+    /* STEPS */
+    .steps { display: flex; flex-direction: column; gap: 10px; }
+    .step {
+      background: var(--white); border: 1px solid var(--line);
+      border-radius: 12px; padding: 18px 20px;
+      display: flex; gap: 14px; align-items: flex-start;
+    }
+    .step-num {
+      width: 28px; height: 28px; border-radius: 8px;
+      background: var(--ink); color: #fff;
+      font-size: 13px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .step-title { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+    .step-desc  { font-size: 13px; color: var(--soft); line-height: 1.5; }
+
+    /* HOTKEYS TABLE */
+    .hotkeys { display: grid; grid-template-columns: auto 1fr; gap: 0; }
+    .hk-row {
+      display: contents;
+    }
+    .hk-key, .hk-desc {
+      padding: 10px 16px;
+      font-size: 13px;
+      border-bottom: 1px solid var(--line);
+    }
+    .hk-key {
+      background: #f5f5f5;
+      font-family: "SF Mono", monospace;
+      font-size: 12px; font-weight: 600;
+      color: var(--ink); white-space: nowrap;
+    }
+    .hk-desc { color: var(--ink2); background: var(--white); }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 28px 40px;
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 12px; color: #bbb;
+    }
+    .footer-link { color: #bbb; text-decoration: none; }
+    .footer-link:hover { color: var(--ink); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="index.html">
+    <div class="nav-icon">🎙</div>
+    <span class="nav-name">Vani</span>
+  </a>
+  <a class="nav-back" href="index.html">← Back to home</a>
+</nav>
+
+<div class="hero">
+  <h1>How can we help?</h1>
+  <p>Everything you need to get started and fix common issues.</p>
+</div>
+
+<div class="content">
+
+  <!-- GETTING STARTED -->
+  <div class="section">
+    <div class="section-title">Getting Started</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div>
+          <div class="step-title">Download and open Vani</div>
+          <div class="step-desc">Download the DMG, drag Vani to your Applications folder, then open it from there — not from the DMG directly.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div>
+          <div class="step-title">Grant permissions</div>
+          <div class="step-desc">Vani needs Microphone access to hear you, and Accessibility access to type at your cursor. Both are prompted on first launch.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div>
+          <div class="step-title">Wait for the model to load</div>
+          <div class="step-desc">On first launch, Vani downloads the Whisper model (~150MB). This takes 1–2 minutes. After that, it's instant.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div>
+          <div class="step-title">Hold ⌥ Option and speak</div>
+          <div class="step-desc">Click into any text field in any app, hold the Option key, speak, then release. Your words appear at the cursor.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOTKEYS -->
+  <div class="section">
+    <div class="section-title">Hotkeys</div>
+    <div class="card">
+      <div class="hotkeys">
+        <div class="hk-key">Hold ⌥ Option</div>
+        <div class="hk-desc">Push-to-talk — records while held, types when released</div>
+        <div class="hk-key">Double-tap ⌥</div>
+        <div class="hk-desc">Hands-free toggle — tap once to start, tap again to stop</div>
+        <div class="hk-key">⌥ + Space</div>
+        <div class="hk-desc">Alternative hands-free trigger</div>
+      </div>
+    </div>
+    <p style="font-size:12px;color:var(--soft);margin-top:10px;">You can change the hotkey in Settings → General.</p>
+  </div>
+
+  <!-- PERMISSIONS -->
+  <div class="section">
+    <div class="section-title">Permissions Setup</div>
+
+    <div class="card">
+      <div class="card-header"><span class="card-q">How do I grant Microphone access?</span></div>
+      <div class="card-body">
+        <p>Go to <strong>System Settings → Privacy & Security → Microphone</strong> and toggle Vani on. If Vani doesn't appear, make sure it's running (mic icon in the menu bar).</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="card-q">How do I grant Accessibility access?</span></div>
+      <div class="card-body">
+        <p>Go to <strong>System Settings → Privacy & Security → Accessibility</strong>. If Vani isn't listed, click <code>+</code> and navigate to <code>/Applications/Vani.app</code>. Toggle it on, then restart Vani.</p>
+        <p>Accessibility is required for Vani to type at your cursor. Without it, dictation won't paste.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="card-q">Vani doesn't appear in the Accessibility list</span></div>
+      <div class="card-body">
+        <p>This usually means Vani was run directly from the DMG instead of from your Applications folder. Make sure you've dragged Vani to <code>/Applications</code> and opened it from there. Then try clicking <code>+</code> in the Accessibility list again.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TROUBLESHOOTING -->
+  <div class="section">
+    <div class="section-title">Troubleshooting</div>
+
+    <div class="card">
+      <div class="card-header"><span class="card-q">Dictation isn't pasting text at the cursor</span></div>
+      <div class="card-body">
+        <p>This is almost always an Accessibility permission issue. Check that Vani is enabled in <strong>System Settings → Privacy & Security → Accessibility</strong>.</p>
+        <p>If it's already on, try toggling it off and back on, then restart Vani.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="card-q">The pill shows "No audio" or "Didn't catch that"</span></div>
+      <div class="card-body">
+        <p>A few things to check:</p>
+        <ul>
+          <li>Make sure Microphone permission is granted in System Settings.</li>
+          <li>Check that the correct mic is selected in <strong>Settings → General → Microphone</strong>.</li>
+          <li>Hold the hotkey for at least 0.5 seconds before speaking.</li>
+          <li>Speak clearly — the Whisper model needs a moment to detect speech.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="card-q">Apple Intelligence shows "Unavailable"</span></div>
+      <div class="card-body">
+        <p>Apple Intelligence requires macOS 26 on Apple Silicon. Go to <strong>System Settings → Apple Intelligence & Siri</strong> and make sure it's enabled.</p>
+        <p>If it's unavailable, Vani falls back to basic cleanup (capitalisation + punctuation) — dictation still works, just without AI enhancement.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="card-q">The app crashed or quit unexpectedly</span></div>
+      <div class="card-body">
+        <p>Open Vani, go to the sidebar → <strong>Diagnostic Log</strong>. This opens the log file and lets you send it as feedback. Include the log when reporting — it helps identify exactly what went wrong.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="section">
+    <div class="section-title">FAQ</div>
+
+    <div class="card">
+      <div class="card-header"><span class="card-q">Does Vani send my voice or text anywhere?</span></div>
+      <div class="card-body">
+        <p>No. Everything runs on your Mac. Transcription uses WhisperKit on the Neural Engine, AI cleanup uses Apple Intelligence locally. No audio or text ever leaves your device.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="card-q">Which Macs does Vani support?</span></div>
+      <div class="card-body">
+        <p>Vani requires macOS 26 Tahoe and Apple Silicon (M1 or later). It does not run on Intel Macs.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="card-q">How do I add words Vani keeps mishearing?</span></div>
+      <div class="card-body">
+        <p>Open Vani → <strong>Dictionary</strong> tab → click <strong>Add word</strong>. Add names, product terms, or technical jargon. Vani also learns automatically — words you use 3+ times get added on their own.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="card-q">Is Vani free?</span></div>
+      <div class="card-body">
+        <p>Yes. Vani is free and open source. No subscription, no account, no limits.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- STILL STUCK -->
+  <div style="background:var(--white);border:1px solid var(--line);border-radius:14px;padding:32px;text-align:center;">
+    <div style="font-size:28px;margin-bottom:12px;">🤔</div>
+    <div style="font-size:17px;font-weight:700;margin-bottom:8px;">Still stuck?</div>
+    <p style="font-size:14px;color:var(--soft);margin-bottom:20px;">Send a message and we'll help you out.</p>
+    <a href="feedback.html" style="display:inline-block;background:var(--ink);color:#fff;font-size:14px;font-weight:600;padding:12px 28px;border-radius:10px;text-decoration:none;">Send feedback →</a>
+  </div>
+
+</div>
+
+<footer>
+  <span>Vani · Free & open source</span>
+  <a class="footer-link" href="https://github.com/varun-kaapoor/vani" target="_blank">GitHub</a>
+</footer>
+
+</body>
+</html>
