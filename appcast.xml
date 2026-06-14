@@ -9,16 +9,16 @@
     <language>en</language>
 
     <item>
-      <title>Version 1.0</title>
+      <title>Version 1.3</title>
       <pubDate>Sat, 14 Jun 2026 00:00:00 +0000</pubDate>
-      <sparkle:releaseNotesLink>https://github.com/varun-kaapoor/vani/releases/tag/v1.0</sparkle:releaseNotesLink>
+      <sparkle:releaseNotesLink>https://github.com/varun-kaapoor/vani/releases/tag/v1.3</sparkle:releaseNotesLink>
       <enclosure
-        url="https://github.com/varun-kaapoor/vani/releases/download/v1.0/Vani.dmg"
-        sparkle:version="1"
-        sparkle:shortVersionString="1.0"
-        length="0"
+        url="https://github.com/varun-kaapoor/vani/releases/download/v1.3/Vani.dmg"
+        sparkle:version="8"
+        sparkle:shortVersionString="1.3"
+        length="2985984"
         type="application/octet-stream"
-        sparkle:edSignature="REPLACE_WITH_SIGNATURE_FROM_sign_update"
+        sparkle:edSignature="BFiEVXwTc+xVQS68KsGZV85p+TE1AFj8Ir21ZHYLx+4eFoEodbMcGiHfmysb28RCi8YW98mlK4hGlMvU2AeCDQ=="
       />
     </item>
 
